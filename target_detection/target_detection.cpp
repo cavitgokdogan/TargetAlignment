@@ -24,6 +24,13 @@ int main()
 		inRange(HSVres, Scalar(0, 192, 90), Scalar(179, 255, 255), isres);
 
 		rectangle(frame, Point(320, 240), Point(330, 250), FILLED);
+		
+		/*erode(isres, isres, 3, Point(-1, -1), 1, BORDER_DEFAULT, morphologyDefaultBorderValue());
+		dilate(isres, isres, 3, Point(-1, -1), 1, BORDER_DEFAULT, morphologyDefaultBorderValue());
+														 // If you want higher performance you should use them
+		dilate(isres, isres, 3, Point(-1, -1), 1, BORDER_DEFAULT, morphologyDefaultBorderValue());
+		erode(isres, isres, 3, Point(-1, -1), 1, BORDER_DEFAULT, morphologyDefaultBorderValue());*/
+		
 
 		erode(isres, isres, getStructuringElement(MORPH_ELLIPSE, Size(2, 2)));
 		dilate(isres, isres, getStructuringElement(MORPH_ELLIPSE, Size(2, 2)));
@@ -33,62 +40,52 @@ int main()
 
 		Moments konum = moments(isres);
 
-		int eskix = -1;
-		int eskiy = -1;
-
 		double yeksen = konum.m01;
 		double xeksen = konum.m10;
 		double alan = konum.m00;
 
 		int yenix = xeksen / alan;
 		int yeniy = yeksen / alan;
-
-		Mat araframe;
-		vid.read(araframe);
-
-		Mat cizgiResim = Mat::zeros(araframe.size(), CV_8UC3);
-
-		eskix = yenix;
-		eskiy = yeniy;
-
-		line(cizgiResim, Point(yenix, yeniy), Point(eskix, eskiy), Scalar(0, 0, 255), 4, LINE_8, 0);
-
-		frame = frame + cizgiResim;
-
-		if (yenix < 320)
+		
+		if (alan > 10000)				// Only target-sized reds are detected, not every red it sees.
 		{
-			cout << "left!!" << endl;
-			if (yeniy < 240)
+			putText(frame, ".", Point(yenix - 10, yeniy), FONT_HERSHEY_PLAIN, 3, Scalar(0, 255, 0), 2);
+			b = true;
+			if (yenix < 320)
 			{
-				cout << "Down!!" << endl;
+				cout << "Left!!" << endl;
+				if (yeniy < 240)
+				{
+					cout << "Down!!" << endl;
+				}
+				else if (yeniy > 250)
+				{
+					cout << "Up!!" << endl;
+				}
 			}
-			else if (yeniy > 250)
+			else if (yenix > 330)
 			{
-				cout << "Up!!" << endl;
+				cout << "Right!!" << endl;
+				if (yeniy < 240)
+				{
+					cout << "Down!!" << endl;
+				}
+				else if (yeniy > 250)
+				{
+					cout << "Up!!" << endl;
+				}
 			}
-		}
-		else if (yenix > 330)
-		{
-			cout << "Right!!" << endl;
-			if (yeniy < 240)
+			else if (yenix > 320 && yenix < 330 && yeniy > 240 && yeniy < 250)
 			{
-				cout << "Down!!" << endl;
+				cout << "Correct location!!" << endl;
+				b = false;
 			}
-			else if (yeniy > 250)
-			{
-				cout << "Up!!" << endl;
-			}
-		}
-		else if (yenix > 320 && yenix < 330 && yeniy > 240 && yeniy < 250)
-		{
-			cout << "Correct location!!" << endl;
-		}
 
-		if (waitKey(30) == 27 || frame.empty())
-		{
-			break;
-
-		}
+			if (waitKey(30) == 27 || frame.empty())
+			{
+				break;
+				
+			}		
 
 		imshow("Webcam", frame);
 		imshow("Webcam2", isres);
