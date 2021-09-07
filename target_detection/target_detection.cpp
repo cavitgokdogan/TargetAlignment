@@ -27,7 +27,7 @@ int main()
 		
 		/*erode(isres, isres, 3, Point(-1, -1), 1, BORDER_DEFAULT, morphologyDefaultBorderValue());
 		dilate(isres, isres, 3, Point(-1, -1), 1, BORDER_DEFAULT, morphologyDefaultBorderValue());
-														 // If you want higher performance you should use them
+														 // If you want higher performance, you should use them
 		dilate(isres, isres, 3, Point(-1, -1), 1, BORDER_DEFAULT, morphologyDefaultBorderValue());
 		erode(isres, isres, 3, Point(-1, -1), 1, BORDER_DEFAULT, morphologyDefaultBorderValue());*/
 		
