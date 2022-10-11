@@ -1,3 +1,4 @@
+Bu kod Genç Mühendisler Topluluğunda verdiğim "Görüntü İşlemeye Giriş" eğitiminde örnek olarak yazılmıştır.
 # Target Alignment
 !!! You must have the OpenCV library for these codes to work
 
